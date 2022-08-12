@@ -20,13 +20,7 @@ public class JobData {
 
     private static ArrayList<HashMap<String, String>> allJobs;
 
-    /**
-     * Fetch list of all values from loaded data,
-     * without duplicates, for a given column.
-     *
-     * @param field The column to retrieve values from
-     * @return List of all of the values of the given field
-     */
+
     public static ArrayList<String> findAll(String field) {
 
         // load data, if not already loaded
@@ -79,7 +73,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -87,24 +81,32 @@ public class JobData {
         return jobs;
     }
 
-    /**
-     * Search all columns for the given term
-     *
-     * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
-     */
+
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
 
-        // load data, if not already loaded
         loadData();
+        
+        ArrayList<HashMap<String, String>> jobsFound = new ArrayList<>();
+        for (int i = 0; i < allJobs.size(); i++){
 
-        // TODO - implement this method
-        return null;
+            HashMap<String, String> oneJob = allJobs.get(i);
+            //oneJob is a single job hashmap
+
+
+            for (String aValue : oneJob.values()){
+                //aValue is a single value inside oneJob
+
+                if (aValue.toLowerCase().contains(value.toLowerCase())){
+                    if (!jobsFound.contains(value)){
+                        jobsFound.add(oneJob);
+                    }
+                }
+            }
+        }
+        return jobsFound;
     }
 
-    /**
-     * Read in data from a CSV file and store it in a list
-     */
+
     private static void loadData() {
 
         // Only load data once
